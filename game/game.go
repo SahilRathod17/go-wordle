@@ -16,17 +16,35 @@ const (
 	maxAttempts   = 6
 )
 
+type InputProvider interface {
+	guessFromUser() string
+}
+
+type RealInputProvider struct{}
+
 func GetWord(wordList []string) string {
 	rand.New(rand.NewSource(time.Now().UnixNano()))
 	return wordList[rand.Intn(len(wordList))]
 }
 
-func PlayGame(correctWord string) {
+func PlayGame(correctWord string, input InputProvider) {
 	attempts := 0
+	wrongAttempts := 0
+
+	if input == nil {
+		input = &RealInputProvider{}
+	}
+
 	for attempts < maxAttempts {
-		guess := guessFromUser()
+		guess := input.guessFromUser()
+
+		if wrongAttempts > 2 {
+			fmt.Println("Too many worng attempts, please start again.")
+			return
+		}
 
 		if len(guess) != maxWordLength {
+			wrongAttempts++
 			fmt.Printf("Guessed word must be %d letters long.\n", maxWordLength)
 			continue
 		}
@@ -43,7 +61,7 @@ func PlayGame(correctWord string) {
 	fmt.Printf("Sorry, you've used all your attempts, The word was: %s\n", correctWord)
 }
 
-func guessFromUser() string {
+func (rip *RealInputProvider) guessFromUser() string {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("What's your guess: ")
 	input, _ := reader.ReadString('\n')

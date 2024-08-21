@@ -64,9 +64,6 @@ func FormatResult(correctWord, guess string) string {
 func formatResult(result []byte, guess string) string {
 	var sb strings.Builder
 	for i, r := range result {
-		// if r == 'G' || r == 'Y' {
-		// 	sb.WriteByte(guess[i])
-		// }
 		switch r {
 		case 'G':
 			sb.WriteString(Green + guess[i:i+1] + Reset)

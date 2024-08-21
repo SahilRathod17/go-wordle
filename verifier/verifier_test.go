@@ -4,6 +4,11 @@ import (
 	"testing"
 )
 
+// Green (\033[32m): For correctly placed letters.
+// Yellow (\033[33m): For correct letters in the wrong place.
+// Red (\033[31m): For incorrect letters.
+// Reset (\033[0m): To reset color formatting.
+
 func TestCompareAndPrint(t *testing.T) {
 	tests := []struct {
 		correctWord string
@@ -14,31 +19,31 @@ func TestCompareAndPrint(t *testing.T) {
 		{
 			correctWord: "apple",
 			guess:       "apple",
-			expected:    "\033[32mapple\033[0m", // All Green
+			expected:    "\033[32ma\033[0m\033[32mp\033[0m\033[32mp\033[0m\033[32ml\033[0m\033[32me\033[0m",
 			isCorrect:   true,
 		},
 		{
 			correctWord: "apple",
 			guess:       "apric",
-			expected:    "\033[32map\033[31mr\033[31mi\033[31mc\033[0m",
+			expected:    "\033[32ma\033[0m\033[32mp\033[0m\033[31mr\033[0m\033[31mi\033[0m\033[31mc\033[0m",
 			isCorrect:   false,
 		},
 		{
 			correctWord: "blimp",
 			guess:       "plumb",
-			expected:    "\033[33mp\033[32ml\033[31mu\033[32mm\033[33mb\033[0m",
+			expected:    "\033[33mp\033[0m\033[32ml\033[0m\033[31mu\033[0m\033[32mm\033[0m\033[33mb\033[0m",
 			isCorrect:   false,
 		},
 		{
 			correctWord: "sword",
 			guess:       "words",
-			expected:    "\033[33mw\033[33mo\033[33mr\033[33md\033[33ms\033[0m",
+			expected:    "\033[33mw\033[0m\033[33mo\033[0m\033[33mr\033[0m\033[33md\033[0m\033[33ms\033[0m",
 			isCorrect:   false,
 		},
 		{
 			correctWord: "happy",
 			guess:       "worry",
-			expected:    "\033[31mw\033[31mo\033[31mr\033[31mr\033[32my\033[0m",
+			expected:    "\033[31mw\033[0m\033[31mo\033[0m\033[31mr\033[0m\033[31mr\033[0m\033[32my\033[0m",
 			isCorrect:   false,
 		},
 	}
