@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bufio"
+	"embed"
 	"fmt"
 	"os"
 	"os/signal"
@@ -10,7 +12,24 @@ import (
 	"github.com/SahilRathod17/go-wordle/words"
 )
 
+//go:embed words.txt
+var content embed.FS
+
 func main() {
+	file, err := content.Open("words.txt")
+	if err != nil {
+		fmt.Println("Error opening embedded file:", err)
+		os.Exit(1)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	if err := scanner.Err(); err != nil {
+		fmt.Println("Error reading file:", err)
+		os.Exit(1)
+	}
+
 	fmt.Println("Welcome to wordle!!")
 
 	wordList, err := words.LoadWords("words.txt")
