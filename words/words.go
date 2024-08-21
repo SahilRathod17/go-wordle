@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// LoadWords loads words from a file and returns them as a slice of strings.
 func LoadWords(filePath string) ([]string, error) {
 	file, err := os.Open(filePath)
 	if err != nil {

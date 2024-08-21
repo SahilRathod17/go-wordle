@@ -16,17 +16,21 @@ const (
 	maxAttempts   = 6
 )
 
+// InputProvider is an interface for providing user input.
 type InputProvider interface {
 	guessFromUser() string
 }
 
+// RealInputProvider implements InputProvider and reads input from the real user.
 type RealInputProvider struct{}
 
+// GetWord returns a random word from the given list.
 func GetWord(wordList []string) string {
 	rand.New(rand.NewSource(time.Now().UnixNano()))
 	return wordList[rand.Intn(len(wordList))]
 }
 
+// PlayGame starts a game with the given correct word and input provider.
 func PlayGame(correctWord string, input InputProvider) {
 	attempts := 0
 	wrongAttempts := 0

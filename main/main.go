@@ -10,9 +10,6 @@ import (
 	"github.com/SahilRathod17/go-wordle/words"
 )
 
-//cat words.txt | tr '[:upper:]' '[:lower:]' | awk 'length($0) == 5' | sed 's/^[ \t]*//;s/[ \t]*$//' > valid_words.txt
-//shuf valid_words.txt > random_valid_words.txt
-
 func main() {
 	fmt.Println("Welcome to wordle!!")
 

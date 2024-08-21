@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// Colors to fill.
 const (
 	Green  = "\033[32m"
 	Yellow = "\033[33m"
@@ -12,6 +13,7 @@ const (
 	Reset  = "\033[0m"
 )
 
+// CompareAndPrint compares the correct word with the guessed word and prints the result.
 func CompareAndPrint(correctWord, guess string) bool {
 	result := make([]byte, len(correctWord))
 	isCorrect := true
@@ -45,7 +47,7 @@ func printResult(result []byte, guess string) {
 	fmt.Println()
 }
 
-// For testing
+// FormatResult formats the result of a word guess.
 func FormatResult(correctWord, guess string) string {
 	result := make([]byte, len(correctWord))
 
