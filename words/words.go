@@ -2,15 +2,16 @@ package words
 
 import (
 	"bufio"
-	"os"
+	"embed"
+	"fmt"
 	"strings"
 )
 
 // LoadWords loads words from a file and returns them as a slice of strings.
-func LoadWords(filePath string) ([]string, error) {
-	file, err := os.Open(filePath)
+func LoadWords(content embed.FS, filePath string) ([]string, error) {
+	file, err := content.Open(filePath)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error opening embedded file: %w", err)
 	}
 	defer file.Close()
 
@@ -18,14 +19,13 @@ func LoadWords(filePath string) ([]string, error) {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		word := strings.TrimSpace(scanner.Text())
-		// fmt.Printf("Processing Raw Word: '%s' | Length: %d\n", word, len(word))
 		if len(word) == 5 {
 			words = append(words, word)
 		}
 	}
 
 	if err := scanner.Err(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error reading file: %w", err)
 	}
 
 	return words, nil

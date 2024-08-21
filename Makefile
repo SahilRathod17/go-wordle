@@ -15,13 +15,14 @@ test:
 
 build:
 	@echo "Buildling.."
+	@go build -o go-wordle main.go
 	@GOARCH=amd64 GOOS=darwin go build -o go-wordle-darwin main.go
 	@GOARCH=amd64 GOOS=linux go build -o go-wordle-linux main.go
 	@GOARCH=amd64 GOOS=windows go build -o go-wordle-windows main.go
 	@echo "Build completed: go-wordle"
 
 run:
-	@./go-wordle
+	@./go-wordle-darwin
 
 clean:
 	@echo "Cleaning.."

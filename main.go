@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"embed"
 	"fmt"
 	"os"
@@ -16,23 +15,10 @@ import (
 var content embed.FS
 
 func main() {
-	file, err := content.Open("words.txt")
-	if err != nil {
-		fmt.Println("Error opening embedded file:", err)
-		os.Exit(1)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-
-	if err := scanner.Err(); err != nil {
-		fmt.Println("Error reading file:", err)
-		os.Exit(1)
-	}
 
 	fmt.Println("Welcome to wordle!!")
 
-	wordList, err := words.LoadWords("words.txt")
+	wordList, err := words.LoadWords(content, "words.txt")
 	if err != nil {
 		fmt.Println(err)
 		return
