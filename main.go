@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/SahilRathod17/go-wordle/game"
+	_ "github.com/SahilRathod17/go-wordle/verifier"
 	"github.com/SahilRathod17/go-wordle/words"
 )
 
