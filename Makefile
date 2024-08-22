@@ -22,7 +22,7 @@ build:
 	@echo "Build completed: go-wordle"
 
 run:
-	@./go-wordle-darwin
+	@go run .
 
 clean:
 	@echo "Cleaning.."
