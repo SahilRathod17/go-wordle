@@ -6,7 +6,6 @@ import (
 	"math/rand"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/SahilRathod17/go-wordle/verifier"
 )
@@ -15,6 +14,25 @@ const (
 	maxWordLength = 5
 	maxAttempts   = 6
 )
+
+// Handling hints
+var usedHint bool
+
+// Provide hint
+func giveHint(correctWord string) string {
+	if usedHint {
+		return "You can not use more than one hint..."
+	}
+	usedHint = true
+	randomIndex := rand.Intn(len(correctWord))
+	hint := string(correctWord[randomIndex])
+	return fmt.Sprintf("Hint: The letter at position %d is '%s'\n", randomIndex+1, hint)
+}
+
+// Reset hint
+func resetHint() {
+	usedHint = false
+}
 
 // InputProvider is an interface for providing user input.
 type InputProvider interface {
@@ -26,7 +44,6 @@ type RealInputProvider struct{}
 
 // GetWord returns a random word from the given list.
 func GetWord(wordList []string) string {
-	rand.New(rand.NewSource(time.Now().UnixNano()))
 	return wordList[rand.Intn(len(wordList))]
 }
 
@@ -42,6 +59,14 @@ func PlayGame(correctWord string, input InputProvider) {
 	for attempts < maxAttempts {
 		guess := input.guessFromUser()
 
+		// Check if player asked for hint
+		if strings.ToLower(guess) == "hint" {
+			fmt.Println(giveHint(correctWord))
+			attempts++
+			fmt.Printf("You have %d attempts left.\n", maxAttempts-attempts)
+			continue
+		}
+
 		if wrongAttempts > 2 {
 			fmt.Println("Too many worng attempts, please start again.")
 			return
@@ -56,6 +81,7 @@ func PlayGame(correctWord string, input InputProvider) {
 		isCorrect := verifier.CompareAndPrint(correctWord, guess)
 		if isCorrect {
 			fmt.Println("Congratulation!! You guessed the word!")
+			resetHint()
 			return
 		}
 
@@ -67,7 +93,11 @@ func PlayGame(correctWord string, input InputProvider) {
 
 func (rip *RealInputProvider) guessFromUser() string {
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("What's your guess: ")
+	if usedHint {
+		fmt.Print("What's your guess: ")
+	} else {
+		fmt.Print("What's your guess (or type 'hint' for a hint): ")
+	}
 	input, _ := reader.ReadString('\n')
 	return strings.TrimSpace(strings.ToLower(input))
 }
